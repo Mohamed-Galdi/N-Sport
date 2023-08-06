@@ -23,3 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 NewsAPI.txt
+api_endpionts.json
