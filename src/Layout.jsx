@@ -1,55 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import  competitionsData  from "./Competitions.json";
+import Matches from "./Matches";
+import { Link } from "react-router-dom";
+
 
 function Layout() {
-  const [Competitions, setCompetitions] = useState([
-    {
-      img: "public/images/Competitions/premier-league-logo.png",
-      active: true,
-      code: "PL",
-    },
-    {
-      img: "public/images/Competitions/LaLiga_logo_2023.png",
-      active: false,
-      code: "PD",
-    },
-    {
-      img: "public/images/Competitions/Italian-Serie-A-Logo.png",
-      active: false,
-      code: "SA",
-    },
-    {
-      img: "public/images/Competitions/Bundesliga_logo.png",
-      active: false,
-      code: "BL1",
-    },
-    {
-      img: "public/images/Competitions/ligue-1-logo.png",
-      active: false,
-      code: "FL1",
-    },
-    {
-      img: "public/images/Competitions/UEFA_Champions_League.png",
-      active: false,
-      code: "CL",
-    },
-    {
-      img: "public/images/Competitions/UEFA_Europa_League.png",
-      active: false,
-      code: "CUP",
-    },
-  ]);
+  const [Competitions, setCompetitions] = useState([]);
+  const [selectedCompetitions, setSelectedCompetitions] = useState("PL");
 
-  // const handleCompetition = (code, e) => {
-  //   e.preventDefault();
-  //   setCompetitions(
-  //     ...Competitions,
-  //     Competitions.map((Comp) => {
-  //       Comp.code !== code
-  //         ? { img: Comp.img, active: false, code: Comp.code }
-  //         : { img: Comp.img, active: true, code: Comp.code };
-  //     })
-  //   );
-  // };
+  useEffect(() => {
+    const fetchData = () => {
+      setCompetitions(competitionsData);
+    };
+
+    fetchData();
+  }, []);
+
   const handleCompetition = (code, e) => {
     e.preventDefault();
     setCompetitions((prevCompetitions) =>
@@ -58,6 +24,7 @@ function Layout() {
         active: Comp.code === code ? true : false,
       }))
     );
+    setSelectedCompetitions(code);
   };
 
   return (
@@ -71,7 +38,7 @@ function Layout() {
           alt="N-Sport logo"
         />
         <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md">
-          {new Date().toLocaleString("en-US",{
+          {new Date().toLocaleString("en-US", {
             weekday: "long",
             day: "2-digit",
             month: "long",
@@ -90,8 +57,9 @@ function Layout() {
         </div>
       </nav>
       {/* --------------------------------------------------- Main  -------------------------------------------------------  */}
-      <div className="bg-neutral-200 h-screen ">
+      <div className=" bg-neutral-100  min-h-screen">
         <div className="mx-auto max-w-5xl">
+          {/* -------------------------------------- Competitions Buttons ---------------------------------------- */}
           <div className="flex justify-around items-center py-2">
             {Competitions.map((competition, index) => (
               <button
@@ -108,6 +76,13 @@ function Layout() {
                 <img src={competition.img} alt="" className="h-16" />
               </button>
             ))}
+          </div>
+          {/* -------------------------------------- Components ---------------------------------------- */}
+          <div>
+            {/* ------------------------------------ Standings ----------------------------------- */}
+            <div>
+              <Matches competition={selectedCompetitions} />
+            </div>
           </div>
         </div>
       </div>

@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 NewsAPI.txt
 api_endpionts.json
+.env

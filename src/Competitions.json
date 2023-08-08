@@ -1,0 +1,37 @@
+[
+  {
+    "img": "public/images/Competitions/premier-league-logo.png",
+    "active": true,
+    "code": "PL"
+  },
+  {
+    "img": "public/images/Competitions/LaLiga_logo_2023.png",
+    "active": false,
+    "code": "PD"
+  },
+  {
+    "img": "public/images/Competitions/Italian-Serie-A-Logo.png",
+    "active": false,
+    "code": "SA"
+  },
+  {
+    "img": "public/images/Competitions/Bundesliga_logo.png",
+    "active": false,
+    "code": "BL1"
+  },
+  {
+    "img": "public/images/Competitions/ligue-1-logo.png",
+    "active": false,
+    "code": "FL1"
+  },
+  {
+    "img": "public/images/Competitions/UEFA_Champions_League.png",
+    "active": false,
+    "code": "CL"
+  },
+  {
+    "img": "public/images/Competitions/UEFA_Europa_League.png",
+    "active": false,
+    "code": "CUP"
+  }
+]
