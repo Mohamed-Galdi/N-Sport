@@ -1,42 +1,48 @@
+// Import necessary libraries/modules
 import React, { useState, useEffect } from "react";
-import  competitionsData  from "./Competitions.json";
-import Matches from "./Matches";
-import { Link } from "react-router-dom";
+import competitionsData from "./Competitions.json"; // Import JSON data containing competitions
+import Matches from "./Matches"; // Import the Matches component
 
-
+// Define the Layout component
 function Layout() {
-  const [Competitions, setCompetitions] = useState([]);
-  const [selectedCompetitions, setSelectedCompetitions] = useState("PL");
+  // State variables
+  const [Competitions, setCompetitions] = useState([]); // Store competitions data
+  const [selectedCompetitions, setSelectedCompetitions] = useState("PL"); // Store the code of the selected competition
 
+  // Fetch competitions data using useEffect hook
   useEffect(() => {
     const fetchData = () => {
-      setCompetitions(competitionsData);
+      setCompetitions(competitionsData); // Set the competitions data from imported JSON
     };
 
     fetchData();
   }, []);
 
+  // Function to handle the selection of a competition
   const handleCompetition = (code, e) => {
     e.preventDefault();
     setCompetitions((prevCompetitions) =>
+      // Update the active state of competitions based on the selected competition
       prevCompetitions.map((Comp) => ({
         ...Comp,
         active: Comp.code === code ? true : false,
       }))
     );
-    setSelectedCompetitions(code);
+    setSelectedCompetitions(code); // Set the selected competition
   };
 
   return (
-    // ------------------------------------------------------- App Layout -----------------------------------------------------//
-    // --------------------------------------------------- Nav Bar   -----------------------------------------------------//
-    <div className="font-Ubuntu  font-semibold">
-      <nav className="bg-ns_background flex justify-between items-center  mx-24  py-4 ">
+    // Main Layout
+    <div className="font-Ubuntu font-semibold">
+      {/* Navigation Bar */}
+      <nav className="bg-ns_background flex justify-between items-center mx-24 py-4">
+        {/* N-Sport logo */}
         <img
           className="h-10"
           src="public/images/logo/logo.png"
           alt="N-Sport logo"
         />
+        {/* Current date and time */}
         <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md">
           {new Date().toLocaleString("en-US", {
             weekday: "long",
@@ -47,20 +53,23 @@ function Layout() {
             minute: "2-digit",
           })}
         </div>
+        {/* Login and Register buttons */}
         <div className="flex gap-4 justify-center items-center">
-          <button className="font-bold bg-ns_primary text-white hover:bg-ns_primary/[0.8] px-6 py-2 rounded-md border border-white  ">
+          <button className="font-bold bg-ns_primary text-white hover:bg-ns_primary/[0.8] px-6 py-2 rounded-md border border-white">
             login
           </button>
-          <button className="font-bold border-2 text-ns_primary hover:text-white hover:bg-ns_primary border-ns_primary rounded-md p-2  ">
+          <button className="font-bold border-2 text-ns_primary hover:text-white hover:bg-ns_primary border-ns_primary rounded-md p-2">
             register
           </button>
         </div>
       </nav>
-      {/* --------------------------------------------------- Main  -------------------------------------------------------  */}
-      <div className=" bg-neutral-100  min-h-screen">
+
+      {/* Main Content */}
+      <div className="bg-neutral-100 min-h-screen">
         <div className="mx-auto max-w-5xl">
-          {/* -------------------------------------- Competitions Buttons ---------------------------------------- */}
+          {/* Competitions Buttons */}
           <div className="flex justify-around items-center py-2">
+            {/* Map through Competitions and render buttons */}
             {Competitions.map((competition, index) => (
               <button
                 onClick={(e) => handleCompetition(competition.code, e)}
@@ -77,9 +86,10 @@ function Layout() {
               </button>
             ))}
           </div>
-          {/* -------------------------------------- Components ---------------------------------------- */}
+
+          {/* Components */}
           <div>
-            {/* ------------------------------------ Standings ----------------------------------- */}
+            {/* Matches Component */}
             <div>
               <Matches competition={selectedCompetitions} />
             </div>
@@ -90,4 +100,4 @@ function Layout() {
   );
 }
 
-export default Layout;
+export default Layout; // Export the Layout component

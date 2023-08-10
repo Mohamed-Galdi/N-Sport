@@ -1,63 +1,34 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { useState, useEffect } from "react"; // Import React hooks
+import axios from "axios"; // Import Axios for making HTTP requests
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton"; // Import Skeleton component for loading placeholders
+import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton component styles
 
 function Matches(props) {
-  const [Matches, setMatches] = useState([
-    {
-      id: 435943,
-      utcDate: "2023-08-11T19:00:00Z",
-      status: "TIMED",
-      matchday: 1,
-      stage: "REGULAR_SEASON",
-      group: null,
-      lastUpdated: "2023-06-16T10:33:56Z",
-      homeTeam: {
-        id: 328,
-        name: "Burnley FC",
-        shortName: "Burnley",
-        tla: "BUR",
-        crest: "https://crests.football-data.org/328.png",
-      },
-      awayTeam: {
-        id: 65,
-        name: "Manchester City FC",
-        shortName: "Man City",
-        tla: "MCI",
-        crest: "https://crests.football-data.org/65.png",
-      },
-      score: {
-        winner: null,
-        duration: "REGULAR",
-        fullTime: {
-          home: null,
-          away: null,
-        },
-        halfTime: {
-          home: null,
-          away: null,
-        },
-      },
-      odds: {
-        msg: "Activate Odds-Package in User-Panel to retrieve odds.",
-      },
-      referees: [],
-    },
-  ]);
-  const [error, setError] = useState(null);
-  const [selectedMatch, setSelectedMatch] = useState(null);
-  const [matchDetails, setMatchDetails] = useState("");
+  // State variables
+  const [Matches, setMatches] = useState([]); // Store matches data (it's the state used on jsx to foreach matches)
+  const [selectedMatch, setSelectedMatch] = useState(null); // Store index of selected match (to show details)
+  const [matchDetails, setMatchDetails] = useState(""); // Store match details
+  const [error, setError] = useState(null); // Store error message
 
-  // format that for matches date and time
+  // State variables for different competitions (to  cache fetched competition to reduce api calls)
+  const [PL_Matches, setPL_Matches] = useState([]);
+  const [PD_Matches, setPD_Matches] = useState([]);
+  const [SA_Matches, setSA_Matches] = useState([]);
+  const [BL1_Matches, setBL1_Matches] = useState([]);
+  const [FL1_Matches, setFL1_Matches] = useState([]);
+  const [CL_Matches, setCL_Matches] = useState([]);
+  const [EC_Matches, setEC_Matches] = useState([]);
+
+  // Function to format date (Day Month X 202Y)
   function formatDate(utcDate) {
     const date = new Date(utcDate);
     const day = date.toLocaleString("en-US", { weekday: "short" });
     const dayOfMonth = date.getDate();
     const month = date.toLocaleString("en-US", { month: "2-digit" });
-
     return `${day} ${dayOfMonth}/${month}`;
   }
+
+  // Function to format time (hh:mm PM)
   function formatTime(utcDate) {
     const date = new Date(utcDate);
     const time = date.toLocaleString("en-US", {
@@ -67,24 +38,62 @@ function Matches(props) {
     return `${time}`;
   }
 
-  useEffect(() => {
-    setMatches([]);
-    setSelectedMatch(null);
-    axios
+  // Function to fetch matches data (called by an upcoming useEffect only in case the competition data is not cached)
+  const fetchMatches = (competition) => {
+    console.log("I'm calling the API");
+    return axios
       .get("http://localhost:5000/matches", {
         params: {
-          competition: props.competition,
+          competition: competition,
         },
       })
       .then((res) => {
-        setMatches(res.data.matches);
+        return res.data;
       })
+
       .catch((error) => {
         console.error("Error fetching data:", error);
         setError("😕 An error occurred while fetching data !!!");
+        return []; // Return an empty array in case of an error
       });
-  }, [props.competition]);
+  };
 
+  // Function to determine match status (used in jsx to render a status text based on match.status value)
+  const matchStatus = (status) => {
+    switch (status) {
+      case "SCHEDULED":
+        return <p>Date is not available yet</p>;
+
+      case "IN_PLAY":
+        return (
+          <div>
+            <p>🟢 Live </p>
+          </div>
+        );
+      case "PAUSED":
+        return (
+          <div>
+            <p>🔵 Half-Time Pause </p>
+          </div>
+        );
+      case "FINISHED":
+        return (
+          <div>
+            <p>🔴 Finished </p>
+          </div>
+        );
+      case "POSTPONED":
+        return "Postponed";
+      case "SUSPENDED":
+        return "Suspended";
+      case "CANCELED":
+        return "Canceled";
+      default:
+        return "Unknown";
+    }
+  };
+
+  // Function to show match details (called on match click to show it's details)
   const showMatchDetails = async (id, index) => {
     setSelectedMatch(selectedMatch === index ? null : index);
     setMatchDetails("");
@@ -101,12 +110,133 @@ function Matches(props) {
     }
   };
 
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  // set of UseEffects to set matches when specific competition's data changes. (due to the asynchronous nature of JavaScript)
+  useEffect(() => {
+    if (PL_Matches.length !== 0) {
+      setMatches(PL_Matches);
+    }
+  }, [PL_Matches]);
+
+  useEffect(() => {
+    if (PD_Matches.length !== 0) {
+      setMatches(PD_Matches);
+    }
+  }, [PD_Matches]);
+
+  useEffect(() => {
+    if (SA_Matches.length !== 0) {
+      setMatches(SA_Matches);
+    }
+  }, [SA_Matches]);
+
+  useEffect(() => {
+    if (BL1_Matches.length !== 0) {
+      setMatches(BL1_Matches);
+    }
+  }, [BL1_Matches]);
+
+  useEffect(() => {
+    if (FL1_Matches.length !== 0) {
+      setMatches(FL1_Matches);
+    }
+  }, [FL1_Matches]);
+
+  useEffect(() => {
+    if (CL_Matches.length !== 0) {
+      setMatches(CL_Matches);
+    }
+  }, [CL_Matches]);
+
+  useEffect(() => {
+    if (EC_Matches.length !== 0) {
+      setMatches(EC_Matches);
+    }
+  }, [EC_Matches]);
+  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  // UseEffect to fetch and set matches data for the selected competition (call the fetchMatches() function if the competition is not cached, other ways use the cached data)
+  useEffect(() => {
+    setMatches([]); // to keep the Skeleton loading effect when calling new compitition
+    setSelectedMatch(null); // to keep the Skeleton loading effect when calling new match details
+
+    const fetchData = async () => {
+      let fetchedData = [];
+
+      switch (props.competition) {
+        case "PL":
+          if (PL_Matches.length !== 0) {
+            setMatches(PL_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setPL_Matches(fetchedData);
+          }
+          break;
+        case "PD":
+          if (PD_Matches.length !== 0) {
+            setMatches(PD_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setPD_Matches(fetchedData);
+          }
+          break;
+        case "SA":
+          if (SA_Matches.length !== 0) {
+            setMatches(SA_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setSA_Matches(fetchedData);
+          }
+          break;
+        case "BL1":
+          if (BL1_Matches.length !== 0) {
+            setMatches(BL1_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setBL1_Matches(fetchedData);
+          }
+          break;
+        case "FL1":
+          if (FL1_Matches.length !== 0) {
+            setMatches(FL1_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setFL1_Matches(fetchedData);
+          }
+          break;
+        case "CL":
+          if (CL_Matches.length !== 0) {
+            setMatches(CL_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setCL_Matches(fetchedData);
+          }
+          break;
+        case "EC":
+          if (EC_Matches.length !== 0) {
+            setMatches(EC_Matches);
+          } else {
+            fetchedData = await fetchMatches(props.competition);
+            setEC_Matches(fetchedData);
+          }
+          break;
+        default:
+          fetchedData = await fetchMatches(props.competition);
+      }
+    };
+
+    fetchData();
+  }, [props.competition]);
+
   return (
     <div className="flex flex-col gap-4 w-2/3 mt-4">
+      {/* Display error message if an error occurred */}
       {error ? (
         <div className="text-center text-ns_accent text-3xl mt-8">{error}</div>
       ) : Matches.length === 0 ? (
+        // Display Skeleton placeholders while loading data
         <>
+          {/* Skeleton placeholders  */}
           <Skeleton className="skeleton" height={80} />
           <Skeleton className="skeleton" height={80} />
           <Skeleton className="skeleton" height={80} />
@@ -118,8 +248,10 @@ function Matches(props) {
           <Skeleton className="skeleton" height={80} />
         </>
       ) : (
+        // Render matches data
         Matches.map((match, index) => (
           <div key={index}>
+            {/* Match information */}
             <div
               onClick={() => {
                 showMatchDetails(match.id, index);
@@ -135,7 +267,11 @@ function Matches(props) {
                     width={35}
                     height={35}
                   />
-                  <p>{match.homeTeam.name}</p>
+                  <p>
+                    {match.homeTeam.name
+                      ? match.homeTeam.name
+                      : "not yet defined"}
+                  </p>
                 </div>
 
                 <div className="flex justify-around px-2 items-center gap-2 w-1/5 border-2 h-8 border-ns_primary rounded-md">
@@ -157,7 +293,11 @@ function Matches(props) {
                 </div>
 
                 <div className="flex justify-end text-center items-center gap-2 w-2/5">
-                  <p>{match.awayTeam.name}</p>
+                  <p>
+                    {match.awayTeam.name
+                      ? match.awayTeam.name
+                      : "not yet defined"}
+                  </p>
                   <img
                     src={match.awayTeam.crest}
                     alt=""
@@ -167,10 +307,17 @@ function Matches(props) {
                 </div>
               </div>
               <div className="w-1/5 flex items-center justify-center flex-col">
-                <p>{formatDate(match.utcDate)}</p>{" "}
-                <p>{formatTime(match.utcDate)}</p>
+                {match.status !== "TIMED" ? (
+                  matchStatus(match.status)
+                ) : (
+                  <div className="flex items-center justify-center flex-col">
+                    <p>{formatDate(match.utcDate)} 📅 </p>
+                    <p>{formatTime(match.utcDate)} ⏰</p>{" "}
+                  </div>
+                )}
               </div>
             </div>
+            {/* Display match details if selected */}
             {selectedMatch === index && (
               <div
                 className={`bg-ns_background text-ns_text p-2 rounded-b-md border border-black border-t-0 w-11/12 mx-auto transition-transform transform ${
@@ -179,9 +326,11 @@ function Matches(props) {
                     : "-translate-y-full"
                 }`}
               >
+                {/* Match details */}
                 <div className=" flex flex-col gap-1">
                   <div className="flex gap-4">
-                    <p>Stad:</p>
+                    {/* Display stadium information */}
+                    <p>sStadium:</p>
                     {matchDetails === "" ? (
                       <SkeletonTheme baseColor="#f5f5f5" highlightColor="#444">
                         <Skeleton
@@ -194,8 +343,9 @@ function Matches(props) {
                       <p>{matchDetails.venue}</p>
                     )}
                   </div>
+                  {/* Display referee information */}
                   <div className="flex gap-4">
-                    <p>Refere:</p>
+                    <p>Referee:</p>
                     {matchDetails === "" ? (
                       <SkeletonTheme baseColor="#f5f5f5" highlightColor="#444">
                         <Skeleton
@@ -206,8 +356,8 @@ function Matches(props) {
                       </SkeletonTheme>
                     ) : (
                       <p>
-                        {matchDetails.referees.name
-                          ? matchDetails.referees.name
+                        {matchDetails.referees.length !== 0
+                          ? matchDetails.referees[0].name
                           : "unknown yet"}
                       </p>
                     )}
