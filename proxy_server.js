@@ -73,7 +73,6 @@ app.get("/matchDetails", async (req, res) => {
   }
 });
 
-
 // Define a route for fetching standings of a specific competition
 app.get("/standings", async (req, res) => {
   const competition = req.query.competition; // Extract the competition query parameter from the request
@@ -109,6 +108,23 @@ app.get("/scorers", async (req, res) => {
           "X-Auth-Token": "eb4c3705e0174cf6ae84847c5968441f", // Add authentication token in the headers
         },
       }
+    );
+    res.json(response.data);
+  } catch (error) {
+    // Handle errors by logging and sending an error response
+    console.error("Error fetching data:", error.message);
+    res
+      .status(error.response?.status || 500)
+      .json({ error: "Error fetching data" });
+  }
+});
+
+// Define a route for fetching football news in arabic
+app.get("/news", async (req, res) => {
+  try {
+    // Make a GET request to the football data API to fetch scorers of the specific competition
+    const response = await axios.get(
+      `https://newsapi.org/v2/everything?q=football&language=ar&sortBy=publishedAt&apiKey=c9a59498647945f99395443f60d73071`
     );
     res.json(response.data);
   } catch (error) {

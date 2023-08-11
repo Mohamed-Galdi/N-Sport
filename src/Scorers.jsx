@@ -168,7 +168,7 @@ function Scorers(props) {
           {/* <Skeleton className="skeleton" height={500} /> */}
          
           <p className=" mt-4 text-2xl font-Ubuntu text-ns_primary"> {/* this message is better than skeleton loader because before competition start the api sends an empty array */}
-            Data still not available
+            Scorers data still not available
           </p>
         </>
       ) : (
