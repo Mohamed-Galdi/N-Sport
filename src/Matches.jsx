@@ -98,7 +98,7 @@ function Matches(props) {
     setSelectedMatch(selectedMatch === index ? null : index);
     setMatchDetails("");
     try {
-      const response = await axios.get("http://localhost:5000/matcheDetails", {
+      const response = await axios.get("http://localhost:5000/matchDetails", {
         params: {
           id: id,
         },
@@ -330,7 +330,7 @@ function Matches(props) {
                 <div className=" flex flex-col gap-1">
                   <div className="flex gap-4">
                     {/* Display stadium information */}
-                    <p>sStadium:</p>
+                    <p>Stadium:</p>
                     {matchDetails === "" ? (
                       <SkeletonTheme baseColor="#f5f5f5" highlightColor="#444">
                         <Skeleton

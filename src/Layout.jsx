@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import competitionsData from "./Competitions.json"; // Import JSON data containing competitions
 import Matches from "./Matches"; // Import the Matches component
 import Standings  from "./Standings"; // Import the Standings component
+import Scorers from "./Scorers"; // Import the Scorers component
 
 // Define the Layout component
 function Layout() {
@@ -102,7 +103,7 @@ function Layout() {
 
             {/* Standings Component */}
             <div className="w-2/12">
-              {/* <Scorers competition={selectedCompetitions} /> */}
+              <Scorers competition={selectedCompetitions} />
             </div>
           </div>
         </div>

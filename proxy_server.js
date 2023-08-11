@@ -97,6 +97,29 @@ app.get("/standings", async (req, res) => {
   }
 });
 
+// Define a route for fetching scorers of a specific competition
+app.get("/scorers", async (req, res) => {
+  const competition = req.query.competition; // Extract the competition query parameter from the request
+  try {
+    // Make a GET request to the football data API to fetch scorers of the specific competition
+    const response = await axios.get(
+      `https://api.football-data.org/v4/competitions/${competition}/scorers`,
+      {
+        headers: {
+          "X-Auth-Token": "eb4c3705e0174cf6ae84847c5968441f", // Add authentication token in the headers
+        },
+      }
+    );
+    res.json(response.data);
+  } catch (error) {
+    // Handle errors by logging and sending an error response
+    console.error("Error fetching data:", error.message);
+    res
+      .status(error.response?.status || 500)
+      .json({ error: "Error fetching data" });
+  }
+});
+
 // Start the server and listen on the specified port
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
