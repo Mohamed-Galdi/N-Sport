@@ -40,7 +40,7 @@ function Matches(props) {
 
   // Function to fetch matches data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchMatches = (competition) => {
-    console.log("I'm calling the API");
+    console.log("I'm calling the API (Matches)");
     return axios
       .get("http://localhost:5000/matches", {
         params: {
@@ -229,7 +229,7 @@ function Matches(props) {
   }, [props.competition]);
 
   return (
-    <div className="flex flex-col gap-4 w-2/3 mt-4">
+    <div className="flex flex-col gap-4 mt-4">
       {/* Display error message if an error occurred */}
       {error ? (
         <div className="text-center text-ns_accent text-3xl mt-8">{error}</div>

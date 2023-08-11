@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import competitionsData from "./Competitions.json"; // Import JSON data containing competitions
 import Matches from "./Matches"; // Import the Matches component
+import Standings  from "./Standings"; // Import the Standings component
 
 // Define the Layout component
 function Layout() {
@@ -66,7 +67,7 @@ function Layout() {
 
       {/* Main Content */}
       <div className="bg-neutral-100 min-h-screen">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-7xl">
           {/* Competitions Buttons */}
           <div className="flex justify-around items-center py-2">
             {/* Map through Competitions and render buttons */}
@@ -88,10 +89,20 @@ function Layout() {
           </div>
 
           {/* Components */}
-          <div>
+
+          <div className="flex gap-8">
+            {/* Standings Component */}
+            <div className="w-3/12">
+              <Standings competition={selectedCompetitions} />
+            </div>
             {/* Matches Component */}
-            <div>
+            <div className="w-7/12">
               <Matches competition={selectedCompetitions} />
+            </div>
+
+            {/* Standings Component */}
+            <div className="w-2/12">
+              {/* <Scorers competition={selectedCompetitions} /> */}
             </div>
           </div>
         </div>

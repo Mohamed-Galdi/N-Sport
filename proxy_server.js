@@ -63,9 +63,30 @@ app.get("/matchDetails", async (req, res) => {
         },
       }
     );
+    res.json(response.data);
+  } catch (error) {
+    // Handle errors by logging and sending an error response
+    console.error("Error fetching data:", error.message);
+    res
+      .status(error.response?.status || 500)
+      .json({ error: "Error fetching data" });
+  }
+});
 
-    // Log the fetched data and send it as a JSON response
-    console.log("Fetched data:", response.data);
+
+// Define a route for fetching standings of a specific competition
+app.get("/standings", async (req, res) => {
+  const competition = req.query.competition; // Extract the competition query parameter from the request
+  try {
+    // Make a GET request to the football data API to fetch standings of the specific competition
+    const response = await axios.get(
+      `https://api.football-data.org/v4/competitions/${competition}/standings`,
+      {
+        headers: {
+          "X-Auth-Token": "eb4c3705e0174cf6ae84847c5968441f", // Add authentication token in the headers
+        },
+      }
+    );
     res.json(response.data);
   } catch (error) {
     // Handle errors by logging and sending an error response
