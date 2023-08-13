@@ -63,7 +63,7 @@ function Layout() {
         {/* N-Sport logo */}
         <img
           className="h-10"
-          src="public/images/logo/logo.png"
+          src="/images/logo/logo.png"
           alt="N-Sport logo"
         />
         {/* Current date and time */}
@@ -128,7 +128,7 @@ function Layout() {
                     ? Competitions.find(
                         (comp) => comp.code === selectedCompetitions
                       ).img
-                    : "public/images/Competitions/premier-league-logo.png"
+                    : "/images/Competitions/premier-league-logo.png"
                 }
                 className="w-6 h-6"
               />
@@ -226,7 +226,7 @@ function Layout() {
         <div className=" flex md:flex-row flex-col md:gap-0 gap-6  justify-between items-center mx-auto max-w-7xl">
           <div>
             <img
-              src="public/images/logo/White_Logo.png"
+              src="/images/logo/White_Logo.png"
               alt="N-Sport"
               width={100}
             />

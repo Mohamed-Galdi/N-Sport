@@ -1,42 +1,42 @@
 [
   {
-    "img": "public/images/Competitions/premier-league-logo.png",
+    "img": "/images/Competitions/premier-league-logo.png",
     "active": true,
     "code": "PL",
     "name": "Premier League"
   },
   {
-    "img": "public/images/Competitions/LaLiga_logo_2023.png",
+    "img": "/images/Competitions/LaLiga_logo_2023.png",
     "active": false,
     "code": "PD",
     "name": "La Liga"
   },
   {
-    "img": "public/images/Competitions/Italian-Serie-A-Logo.png",
+    "img": "/images/Competitions/Italian-Serie-A-Logo.png",
     "active": false,
     "code": "SA",
     "name": "Serie-A"
   },
   {
-    "img": "public/images/Competitions/Bundesliga_logo.png",
+    "img": "/images/Competitions/Bundesliga_logo.png",
     "active": false,
     "code": "BL1",
     "name": "Bundesliga"
   },
   {
-    "img": "public/images/Competitions/ligue-1-logo.png",
+    "img": "/images/Competitions/ligue-1-logo.png",
     "active": false,
     "code": "FL1",
     "name": "Ligue 1"
   },
   {
-    "img": "public/images/Competitions/UEFA_Champions_League.png",
+    "img": "/images/Competitions/UEFA_Champions_League.png",
     "active": false,
     "code": "CL",
     "name": "UEFA_Champions_League"
   },
   {
-    "img": "public/images/Competitions/UEFA_Europa_League.png",
+    "img": "/images/Competitions/UEFA_Europa_League.png",
     "active": false,
     "code": "EC",
     "name": "UEFA_Europa_League"
