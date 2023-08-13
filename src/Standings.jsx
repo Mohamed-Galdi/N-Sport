@@ -27,7 +27,11 @@ function Standings(props) {
         },
       })
       .then((res) => {
-        return res.data.standings[0].table;
+        if (competition == "CL" || competition == "EC") {
+          return res.data.standings;
+        } else {
+          return res.data.standings[0].table;
+        }
       })
 
       .catch((error) => {
@@ -39,18 +43,31 @@ function Standings(props) {
 
   // function to convert the team form that comes as string ('W,W,L,L,D') into styled <p> element
   const formatTeamForm = (form) => {
-    if(!form){
-      return <p>-</p> // return - when it's null
+    if (!form) {
+      return <p>-</p>; // return - when it's null
     }
     const formArray = form.split(","); // convert string to array
-    return formArray.map((result) => { // return here is important
+    return formArray.map((result) => {
+      // return here is important
       switch (result) {
         case "W":
-          return <p className=" bg-green-600 rounded-full text-white w-4 h-4 text-xs">w</p>;
+          return (
+            <p className=" bg-green-600 rounded-full text-white w-4 h-4 text-xs">
+              w
+            </p>
+          );
         case "L":
-          return <p className=" bg-red-600 rounded-full text-white w-4 h-4 text-xs">l</p>;
+          return (
+            <p className=" bg-red-600 rounded-full text-white w-4 h-4 text-xs">
+              l
+            </p>
+          );
         case "D":
-          return <p className=" bg-blue-600 rounded-full text-white w-4 h-4 text-xs">d</p>;
+          return (
+            <p className=" bg-blue-600 rounded-full text-white w-4 h-4 text-xs">
+              d
+            </p>
+          );
         default:
           return <p className="">-</p>;
       }
@@ -173,6 +190,7 @@ function Standings(props) {
 
     fetchData();
   }, [props.competition]);
+  console.log(Standings.length);
 
   return (
     <div className="flex flex-col gap-4 mt-4">
@@ -185,6 +203,91 @@ function Standings(props) {
           {/* Skeleton placeholders  */}
           <Skeleton className="skeleton" height={500} />
         </>
+      ) : Standings.length === 8 ? (
+        <div>
+          {Standings.map((group, index) => (
+            <div key={index}>
+              <p className="text-center text-2xl font-Ubuntu text-gray-800 mb-2">{group.group}</p>
+              <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mb-12">
+                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                      <th scope="col" className="px-2 py-3 text-center">
+                        Pos
+                      </th>
+                      <th scope="col" className="px-6 py-3">
+                        Team
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Pts
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Played
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Win
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Lose
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Draw
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Goals sccored
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Goals Agains
+                      </th>
+                      <th scope="col" className="px-2 py-3">
+                        Goals diff
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {group.table.map((team, index) => (
+                      <tr
+                        key={index}
+                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                      >
+                        <td className="px-2 py-4 text-center">
+                          {team.position}
+                        </td>
+                        <td className="px-2 py-4">
+                          <div className="flex justify-start items-center gap-2">
+                            <img
+                              src={team.team.crest}
+                              alt="team logo"
+                              width={25}
+                              height={25}
+                            />
+                            <p>{team.team.tla}</p>
+                          </div>
+                        </td>
+                        <td className="px-2 py-4 text-center">{team.points}</td>
+                        <td className="px-2 py-4 text-center">
+                          {team.playedGames}
+                        </td>
+                        <td className="px-2 py-4 text-center">{team.won}</td>
+                        <td className="px-2 py-4 text-center">{team.lost}</td>
+                        <td className="px-2 py-4 text-center">{team.draw}</td>
+                        <td className="px-2 py-4 text-center">
+                          {team.goalsFor}
+                        </td>
+                        <td className="px-2 py-4 text-center">
+                          {team.goalsAgainst}
+                        </td>
+                        <td className="px-2 py-4 text-center">
+                          {team.goalDifference}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         // Render Standings data
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">

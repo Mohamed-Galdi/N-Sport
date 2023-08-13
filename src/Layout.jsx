@@ -15,6 +15,7 @@ function Layout() {
   const [selectedCompetitions, setSelectedCompetitions] = useState("PL"); // Store the code of the selected competition
   const [News, setNews] = useState([]); // Store News data (it's the state used on jsx to foreach News)
   const [error, setError] = useState(null); // Store error message
+  const [mobileMenu, setMobileMenu] = useState(false); // State to show or hive the competitions dropdown on mobile devices
 
   // Fetch competitions data using useEffect hook
   useEffect(() => {
@@ -36,6 +37,7 @@ function Layout() {
       }))
     );
     setSelectedCompetitions(code); // Set the selected competition
+    setMobileMenu(!mobileMenu); //
   };
 
   // fetch News from the api only on first render
@@ -57,7 +59,7 @@ function Layout() {
     // Main Layout
     <div className="font-Ubuntu font-semibold ">
       {/* Navigation Bar */}
-      <nav className="bg-ns_background flex justify-between items-center py-4 mx-auto max-w-7xl">
+      <nav className="bg-ns_background  flex justify-between items-center py-4 md:mx-auto mx-4 max-w-7xl">
         {/* N-Sport logo */}
         <img
           className="h-10"
@@ -65,33 +67,36 @@ function Layout() {
           alt="N-Sport logo"
         />
         {/* Current date and time */}
-        <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md">
-          {new Date().toLocaleString("en-US", {
-            weekday: "long",
-            day: "2-digit",
-            month: "long",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-        </div>
-        {/* Login and Register buttons */}
-        <div className="flex gap-4 justify-center items-center">
-          <button className="font-bold bg-ns_primary text-white hover:bg-ns_primary/[0.8] px-6 py-2 rounded-md border border-white">
-            login
-          </button>
-          <button className="font-bold border-2 text-ns_primary hover:text-white hover:bg-ns_primary border-ns_primary rounded-md p-2">
-            register
-          </button>
+        <div className="flex  gap-4">
+          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md  md:block hidden">
+            {new Date().toLocaleString("en-US", {
+              weekday: "long",
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+            })}
+          </div>
+          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md  md:hidden block">
+            {new Date().toLocaleString("en-US", {
+              day: "2-digit",
+              month: "long",
+            })}
+          </div>
+          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md">
+            {new Date().toLocaleString("en-US", {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </div>
         </div>
       </nav>
 
       {/* Main Content */}
-      <div className="bg-neutral-100 min-h-screen pb-12">
-        <div className="mx-auto max-w-7xl">
+      <div className="bg-neutral-100 min-h-screen pb-12 pt-4">
+        <div className="mx-auto max-w-7xl ">
           {/* Competitions Buttons */}
-          <div className="flex justify-around items-center py-2">
-            {/* Map through Competitions and render buttons */}
+          <div className="hidden justify-around items-center py-2 md:flex">
+            {/* Map through Competitions and render buttons (Desktop Design) */}
             {Competitions.map((competition, index) => (
               <button
                 onClick={(e) => handleCompetition(competition.code, e)}
@@ -109,46 +114,94 @@ function Layout() {
             ))}
           </div>
 
+          {/* Competitions DropDown and render buttons (Desktop Design) */}
+          <div className="relative md:hidden block  ">
+            <button
+              onClick={() => {
+                setMobileMenu(!mobileMenu);
+              }}
+              className=" flex w-4/5 h-12 mx-auto justify-start  items-center space-x-2 bg-gray-300 px-4 py-2 rounded focus:outline-none"
+            >
+              <img
+                src={
+                  Competitions.length !== 0
+                    ? Competitions.find(
+                        (comp) => comp.code === selectedCompetitions
+                      ).img
+                    : "public/images/Competitions/premier-league-logo.png"
+                }
+                className="w-6 h-6"
+              />
+              <p>
+                {Competitions.length !== 0
+                  ? Competitions.find(
+                      (comp) => comp.code === selectedCompetitions
+                    ).name
+                  : "Premier League"}
+              </p>
+            </button>
+            <ul
+              className={`z-50 w-4/5  mx-auto top-full left-0 mt-1 bg-white border border-gray-300 rounded shadow-md ${
+                mobileMenu ? "hidden" : "block"
+              } `}
+            >
+              {Competitions.map((competition, index) => (
+                <li
+                  key={index}
+                  className="flex items-center h-12 justify-start gap-2 overflow-hidden px-4 py-2 cursor-pointer hover:bg-gray-100"
+                  onClick={(e) => handleCompetition(competition.code, e)}
+                >
+                  <img
+                    src={competition.img}
+                    alt={competition.code}
+                    className="w-6 h-6"
+                  />
+                  <p className="">{competition.name}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Components */}
 
-          <div className="mt-4 flex gap-8">
+          <div className="mt-4 flex md:flex-row flex-col  gap-8">
             {/* Standings Component */}
-            <div className="w-3/12">
+            <div className="md:w-3/12 md:mx-0 mx-8 md:order-1 order-2">
               <Standings competition={selectedCompetitions} />
             </div>
             {/* Matches Component */}
-            <div className="w-7/12">
+            <div className="md:w-7/12 md:mx-0 mx-8 md:order-2 order-1">
               <Matches competition={selectedCompetitions} />
             </div>
 
             {/* Standings Component */}
-            <div className="w-2/12">
+            <div className="md:w-2/12 md:mx-0 mx-8 md:order-3 order-3">
               <Scorers competition={selectedCompetitions} />
             </div>
           </div>
           {/* News */}
           <div>
             <div className="w-full h-[1px] my-12 bg-gray-800"></div>
-            <div className="grid grid-cols-4 gap-4">
-              {error ? (
-                <div className="text-center text-ns_accent text-3xl mt-8">
-                  {error}
-                </div>
-              ) : News.length === 0 ? (
-                // Display Skeleton placeholders while loading data
-                <>
-                  {/* Skeleton placeholders  */}
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                  <Skeleton className="skeleton" height={200} />
-                </>
-              ) : (
-                News.map((article, index) => (
+            {error ? (
+              <div className="text-center text-ns_accent text-3xl mt-8 w-full ">
+                <p>{error}</p>
+              </div>
+            ) : News.length === 0 ? (
+              // Display Skeleton placeholders while loading data
+              <div className="grid md:grid-cols-4 grid-cols-2 mx-8 gap-4">
+                {/* Skeleton placeholders  */}
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-4 grid-cols-2 mx-8 gap-4">
+                {News.map((article, index) => (
                   <div
                     className="border bg-white p-2 rounded-lg hover:border hover:border-ns_primary hover:cursor-pointer"
                     key={index}
@@ -162,15 +215,15 @@ function Layout() {
                       <p className="text-end mt-2">{article.title}</p>
                     </a>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8">
-        <div className=" flex justify-between items-center mx-auto max-w-7xl">
+        <div className=" flex md:flex-row flex-col md:gap-0 gap-6  justify-between items-center mx-auto max-w-7xl">
           <div>
             <img
               src="public/images/logo/White_Logo.png"
@@ -178,8 +231,10 @@ function Layout() {
               width={100}
             />
           </div>
-          <div className="font-normal">
-            <p>&#169; 2023 MOHAMED GALDI, ALL RIGHTS RESERVED</p>
+          <div className="font-normal md:order-2 order-last">
+            <p className="text-center">
+              &#169; 2023 MOHAMED GALDI, ALL RIGHTS RESERVED
+            </p>
           </div>
           <div className="flex justify-between items-center gap-4">
             <a

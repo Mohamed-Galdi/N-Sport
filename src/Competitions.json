@@ -2,36 +2,43 @@
   {
     "img": "public/images/Competitions/premier-league-logo.png",
     "active": true,
-    "code": "PL"
+    "code": "PL",
+    "name": "Premier League"
   },
   {
     "img": "public/images/Competitions/LaLiga_logo_2023.png",
     "active": false,
-    "code": "PD"
+    "code": "PD",
+    "name": "La Liga"
   },
   {
     "img": "public/images/Competitions/Italian-Serie-A-Logo.png",
     "active": false,
-    "code": "SA"
+    "code": "SA",
+    "name": "Serie-A"
   },
   {
     "img": "public/images/Competitions/Bundesliga_logo.png",
     "active": false,
-    "code": "BL1"
+    "code": "BL1",
+    "name": "Bundesliga"
   },
   {
     "img": "public/images/Competitions/ligue-1-logo.png",
     "active": false,
-    "code": "FL1"
+    "code": "FL1",
+    "name": "Ligue 1"
   },
   {
     "img": "public/images/Competitions/UEFA_Champions_League.png",
     "active": false,
-    "code": "CL"
+    "code": "CL",
+    "name": "UEFA_Champions_League"
   },
   {
     "img": "public/images/Competitions/UEFA_Europa_League.png",
     "active": false,
-    "code": "EC"
+    "code": "EC",
+    "name": "UEFA_Europa_League"
   }
 ]

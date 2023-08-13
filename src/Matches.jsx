@@ -66,20 +66,20 @@ function Matches(props) {
 
       case "IN_PLAY":
         return (
-          <div>
-            <p>🟢 Live </p>
+          <div className="mx-auto" >
+            <p className="text-center mx-auto">🟢 Live </p>
           </div>
         );
       case "PAUSED":
         return (
-          <div>
-            <p>🔵 Half-Time Pause </p>
+          <div className="mx-auto">
+            <p className="text-center mx-auto">🔵 Half-Time Pause </p>
           </div>
         );
       case "FINISHED":
         return (
-          <div>
-            <p>🔴 Finished </p>
+          <div className="mx-auto">
+            <p className="text-center mx-auto">🔴 Finished </p>
           </div>
         );
       case "POSTPONED":
@@ -257,9 +257,9 @@ function Matches(props) {
                 showMatchDetails(match.id, index);
               }}
               key={index}
-              className="flex  items-center bg-white p-4 rounded-md border border-ns_primary h-[80px] hover:cursor-pointer hover:border-2"
+              className="flex md:flex-row flex-col  items-center bg-white p-4 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
             >
-              <div className="flex justify-between items-center gap-8 border-r-2 border-r-ns_primary pr-8 w-4/5 h-[55px]">
+              <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
                 <div className="flex justify-start text-center items-center gap-2 w-2/5">
                   <img
                     src={match.homeTeam.crest}
@@ -268,8 +268,8 @@ function Matches(props) {
                     height={35}
                   />
                   <p>
-                    {match.homeTeam.name
-                      ? match.homeTeam.name
+                    {match.homeTeam.shortName
+                      ? match.homeTeam.shortName
                       : "not yet defined"}
                   </p>
                 </div>
@@ -294,8 +294,8 @@ function Matches(props) {
 
                 <div className="flex justify-end text-center items-center gap-2 w-2/5">
                   <p>
-                    {match.awayTeam.name
-                      ? match.awayTeam.name
+                    {match.awayTeam.shortName
+                      ? match.awayTeam.shortName
                       : "not yet defined"}
                   </p>
                   <img
@@ -306,16 +306,14 @@ function Matches(props) {
                   />
                 </div>
               </div>
-              <div className="w-1/5 flex items-center justify-center flex-col">
                 {match.status !== "TIMED" ? (
                   matchStatus(match.status)
                 ) : (
-                  <div className="flex items-center justify-center flex-col">
+                  <div className="w-full flex justify-around md:w-1/5 md:flex-col md:items-center md:gap-2">
                     <p>{formatDate(match.utcDate)} 📅 </p>
                     <p>{formatTime(match.utcDate)} ⏰</p>{" "}
                   </div>
                 )}
-              </div>
             </div>
             {/* Display match details if selected */}
             {selectedMatch === index && (
