@@ -42,7 +42,7 @@ function Matches(props) {
   const fetchMatches = (competition) => {
     console.log("I'm calling the API (Matches)");
     return axios
-      .get("http://localhost:5000/matches", {
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/matches", {
         params: {
           competition: competition,
         },
@@ -98,11 +98,14 @@ function Matches(props) {
     setSelectedMatch(selectedMatch === index ? null : index);
     setMatchDetails("");
     try {
-      const response = await axios.get("http://localhost:5000/matchDetails", {
-        params: {
-          id: id,
-        },
-      });
+      const response = await axios.get(
+        "https://hammerhead-app-wbbqf.ondigitalocean.app/matchDetails",
+        {
+          params: {
+            id: id,
+          },
+        }
+      );
       setMatchDetails(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);

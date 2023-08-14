@@ -44,7 +44,7 @@ function Layout() {
   useEffect(() => {
     console.log("I'm calling the API (News)");
     axios
-      .get("http://localhost:5000/News")
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/News")
       .then((res) => {
         setNews(res.data.articles);
       })

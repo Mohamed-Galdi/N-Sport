@@ -21,7 +21,7 @@ function Scorers(props) {
   const fetchScorers = (competition) => {
     console.log("I'm calling the API (Scorers)");
     return axios
-      .get("http://localhost:5000/scorers", {
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/scorers", {
         params: {
           competition: competition,
         },
