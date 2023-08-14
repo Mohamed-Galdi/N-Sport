@@ -44,7 +44,7 @@ function Layout() {
   useEffect(() => {
     console.log("I'm calling the API (News)");
     axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/News")
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/news")
       .then((res) => {
         setNews(res.data.articles);
       })
