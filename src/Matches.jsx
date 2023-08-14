@@ -42,7 +42,7 @@ function Matches(props) {
   const fetchMatches = (competition) => {
     console.log("I'm calling the API (Matches)");
     return axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/matches", {
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/matches", {
         params: {
           competition: competition,
         },
