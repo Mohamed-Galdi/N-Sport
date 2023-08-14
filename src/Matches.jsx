@@ -42,14 +42,11 @@ function Matches(props) {
   const fetchMatches = (competition) => {
     console.log("I'm calling the API (Matches)");
     return axios
-      .get(
-        "https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/matches",
-        {
-          params: {
-            competition: competition,
-          },
-        }
-      )
+      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/matches", {
+        params: {
+          competition: competition,
+        },
+      })
       .then((res) => {
         return res.data;
       })
@@ -102,7 +99,7 @@ function Matches(props) {
     setMatchDetails("");
     try {
       const response = await axios.get(
-        "https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/matchDetails",
+        "https://lovely-wasp-flannel-shirt.cyclic.cloud/api/matchDetails",
         {
           params: {
             id: id,

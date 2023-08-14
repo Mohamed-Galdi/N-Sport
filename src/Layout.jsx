@@ -44,7 +44,7 @@ function Layout() {
   useEffect(() => {
     console.log("I'm calling the API (News)");
     axios
-      .get("https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/news")
+      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/news")
       .then((res) => {
         setNews(res.data.articles);
       })
