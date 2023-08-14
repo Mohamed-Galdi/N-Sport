@@ -42,7 +42,7 @@ function Matches(props) {
   const fetchMatches = (competition) => {
     console.log("I'm calling the API (Matches)");
     return axios
-      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/matches", {
+      .get(`${import.meta.env.VITE_API_URL}/matches`, {
         params: {
           competition: competition,
         },
@@ -66,7 +66,7 @@ function Matches(props) {
 
       case "IN_PLAY":
         return (
-          <div className="mx-auto" >
+          <div className="mx-auto">
             <p className="text-center mx-auto">🟢 Live </p>
           </div>
         );
@@ -99,7 +99,7 @@ function Matches(props) {
     setMatchDetails("");
     try {
       const response = await axios.get(
-        "https://lovely-wasp-flannel-shirt.cyclic.cloud/api/matchDetails",
+        `${import.meta.env.VITE_API_URL}/matchDetails`,
         {
           params: {
             id: id,
@@ -270,9 +270,14 @@ function Matches(props) {
                     width={35}
                     height={35}
                   />
-                  <p>
+                  <p className="md:block hidden">
                     {match.homeTeam.shortName
                       ? match.homeTeam.shortName
+                      : "not yet defined"}
+                  </p>
+                  <p className="md:hidden block">
+                    {match.homeTeam.tla
+                      ? match.homeTeam.tla
                       : "not yet defined"}
                   </p>
                 </div>
@@ -296,9 +301,14 @@ function Matches(props) {
                 </div>
 
                 <div className="flex justify-end text-center items-center gap-2 w-2/5">
-                  <p>
+                  <p className="md:block hidden">
                     {match.awayTeam.shortName
                       ? match.awayTeam.shortName
+                      : "not yet defined"}
+                  </p>
+                  <p className="md:hidden block">
+                    {match.awayTeam.tla
+                      ? match.awayTeam.tla
                       : "not yet defined"}
                   </p>
                   <img
@@ -309,14 +319,14 @@ function Matches(props) {
                   />
                 </div>
               </div>
-                {match.status !== "TIMED" ? (
-                  matchStatus(match.status)
-                ) : (
-                  <div className="w-full flex justify-around md:w-1/5 md:flex-col md:items-center md:gap-2">
-                    <p>{formatDate(match.utcDate)} 📅 </p>
-                    <p>{formatTime(match.utcDate)} ⏰</p>{" "}
-                  </div>
-                )}
+              {match.status !== "TIMED" ? (
+                matchStatus(match.status)
+              ) : (
+                <div className="w-full flex justify-around md:w-1/5 md:flex-col md:items-center md:gap-2">
+                  <p>{formatDate(match.utcDate)} 📅 </p>
+                  <p>{formatTime(match.utcDate)} ⏰</p>{" "}
+                </div>
+              )}
             </div>
             {/* Display match details if selected */}
             {selectedMatch === index && (

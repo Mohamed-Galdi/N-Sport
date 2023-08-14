@@ -21,7 +21,7 @@ function Scorers(props) {
   const fetchScorers = (competition) => {
     console.log("I'm calling the API (Scorers)");
     return axios
-      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/scorers/", {
+      .get(`${import.meta.env.VITE_API_URL}/scorers`, {
         params: {
           competition: competition,
         },

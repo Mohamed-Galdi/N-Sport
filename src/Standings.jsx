@@ -21,7 +21,7 @@ function Standings(props) {
   const fetchStandings = (competition) => {
     console.log("I'm calling the API (Standings)");
     return axios
-      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/standings", {
+      .get(`${import.meta.env.VITE_API_URL}/standings`, {
         params: {
           competition: competition,
         },

@@ -15,7 +15,7 @@ function Layout() {
   const [selectedCompetitions, setSelectedCompetitions] = useState("PL"); // Store the code of the selected competition
   const [News, setNews] = useState([]); // Store News data (it's the state used on jsx to foreach News)
   const [error, setError] = useState(null); // Store error message
-  const [mobileMenu, setMobileMenu] = useState(false); // State to show or hive the competitions dropdown on mobile devices
+  const [mobileMenu, setMobileMenu] = useState(true); // State to show or hive the competitions dropdown on mobile devices
 
   // Fetch competitions data using useEffect hook
   useEffect(() => {
@@ -44,7 +44,7 @@ function Layout() {
   useEffect(() => {
     console.log("I'm calling the API (News)");
     axios
-      .get("https://lovely-wasp-flannel-shirt.cyclic.cloud/api/news")
+      .get(`${import.meta.env.VITE_API_URL}/news`)
       .then((res) => {
         setNews(res.data.articles);
       })
@@ -224,7 +224,7 @@ function Layout() {
       {/* Footer */}
       <footer className="bg-gray-800 text-white py-8">
         <div className=" flex md:flex-row flex-col md:gap-0 gap-6  justify-between items-center mx-auto max-w-7xl">
-          <div>
+          <div className="order-first">
             <img
               src="/images/logo/White_Logo.png"
               alt="N-Sport"
@@ -236,7 +236,7 @@ function Layout() {
               &#169; 2023 MOHAMED GALDI, ALL RIGHTS RESERVED
             </p>
           </div>
-          <div className="flex justify-between items-center gap-4">
+          <div className="flex justify-between items-center gap-4 order-2 md:order-last">
             <a
               href="https://github.com/Mohamed-Galdi"
               target="_blank"
