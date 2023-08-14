@@ -21,7 +21,7 @@ function Standings(props) {
   const fetchStandings = (competition) => {
     console.log("I'm calling the API (Standings)");
     return axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/standings", {
+      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/standings", {
         params: {
           competition: competition,
         },

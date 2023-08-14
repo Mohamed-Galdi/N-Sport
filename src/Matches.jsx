@@ -99,7 +99,7 @@ function Matches(props) {
     setMatchDetails("");
     try {
       const response = await axios.get(
-        "https://hammerhead-app-wbbqf.ondigitalocean.app/matchDetails",
+        "https://hammerhead-app-wbbqf.ondigitalocean.app/api/matchDetails",
         {
           params: {
             id: id,
