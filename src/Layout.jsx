@@ -42,7 +42,7 @@ function Layout() {
 
   // fetch News from the api only on first rendergi
   useEffect(() => {
-    console.log("I'm calling the API (News)");
+    // console.log("I'm calling the API (News)");
     axios
       .get(`${import.meta.env.VITE_API_URL}/news`)
       .then((res) => {

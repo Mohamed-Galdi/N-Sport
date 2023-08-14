@@ -40,7 +40,7 @@ function Matches(props) {
 
   // Function to fetch matches data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchMatches = (competition) => {
-    console.log("I'm calling the API (Matches)");
+    // console.log("I'm calling the API (Matches)");
     return axios
       .get(`${import.meta.env.VITE_API_URL}/matches`, {
         params: {

@@ -19,7 +19,7 @@ function Standings(props) {
 
   // Function to fetch Standings data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchStandings = (competition) => {
-    console.log("I'm calling the API (Standings)");
+    // console.log("I'm calling the API (Standings)");
     return axios
       .get(`${import.meta.env.VITE_API_URL}/standings`, {
         params: {
@@ -190,7 +190,6 @@ function Standings(props) {
 
     fetchData();
   }, [props.competition]);
-  console.log(Standings.length);
 
   return (
     <div className="flex flex-col gap-4 mt-4">

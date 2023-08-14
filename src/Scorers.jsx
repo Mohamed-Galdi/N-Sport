@@ -19,7 +19,7 @@ function Scorers(props) {
 
   // Function to fetch Scorers data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchScorers = (competition) => {
-    console.log("I'm calling the API (Scorers)");
+    // console.log("I'm calling the API (Scorers)");
     return axios
       .get(`${import.meta.env.VITE_API_URL}/scorers`, {
         params: {
@@ -154,7 +154,6 @@ function Scorers(props) {
     fetchData();
   }, [props.competition]);
 
-  //   console.log(Scorers)
 
   return (
     <div className="flex flex-col gap-4 mt-4">
