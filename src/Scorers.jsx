@@ -21,11 +21,14 @@ function Scorers(props) {
   const fetchScorers = (competition) => {
     console.log("I'm calling the API (Scorers)");
     return axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/scorers", {
-        params: {
-          competition: competition,
-        },
-      })
+      .get(
+        "https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/scorers",
+        {
+          params: {
+            competition: competition,
+          },
+        }
+      )
       .then((res) => {
         return res.data.scorers;
       })

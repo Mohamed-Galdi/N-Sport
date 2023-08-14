@@ -21,11 +21,14 @@ function Standings(props) {
   const fetchStandings = (competition) => {
     console.log("I'm calling the API (Standings)");
     return axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/standings", {
-        params: {
-          competition: competition,
-        },
-      })
+      .get(
+        "https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/standings",
+        {
+          params: {
+            competition: competition,
+          },
+        }
+      )
       .then((res) => {
         if (competition == "CL" || competition == "EC") {
           return res.data.standings;

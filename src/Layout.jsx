@@ -40,11 +40,11 @@ function Layout() {
     setMobileMenu(!mobileMenu); //
   };
 
-  // fetch News from the api only on first render
+  // fetch News from the api only on first rendergi
   useEffect(() => {
     console.log("I'm calling the API (News)");
     axios
-      .get("https://hammerhead-app-wbbqf.ondigitalocean.app/api/news")
+      .get("https://n-sport-proxy-server-4a3888c982d2.herokuapp.com/api/news")
       .then((res) => {
         setNews(res.data.articles);
       })
