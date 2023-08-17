@@ -7,8 +7,8 @@ import { SkeletonTheme } from "react-loading-skeleton";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <SkeletonTheme baseColor="#0092E6" highlightColor="#acdef7">
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <App />
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </SkeletonTheme>
 );

@@ -61,11 +61,7 @@ function Layout() {
       {/* Navigation Bar */}
       <nav className="bg-ns_background  flex justify-between items-center py-4 md:mx-auto mx-4 max-w-7xl">
         {/* N-Sport logo */}
-        <img
-          className="h-10"
-          src="/images/logo/logo.png"
-          alt="N-Sport logo"
-        />
+        <img className="h-10" src="/images/logo/logo.png" alt="N-Sport logo" />
         {/* Current date and time */}
         <div className="flex  gap-4">
           <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md  md:block hidden">
@@ -225,11 +221,7 @@ function Layout() {
       <footer className="bg-gray-800 text-white py-8">
         <div className=" flex md:flex-row flex-col md:gap-0 gap-6  justify-between items-center mx-auto max-w-7xl">
           <div className="order-first">
-            <img
-              src="/images/logo/White_Logo.png"
-              alt="N-Sport"
-              width={100}
-            />
+            <img src="/images/logo/White_Logo.png" alt="N-Sport" width={100} />
           </div>
           <div className="font-normal md:order-2 order-last">
             <p className="text-center">

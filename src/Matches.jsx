@@ -83,13 +83,13 @@ function Matches(props) {
           </div>
         );
       case "POSTPONED":
-        return "Postponed";
+        return   <p className="text-center mx-auto"> Postponed </p>;
       case "SUSPENDED":
-        return "Suspended";
+        return   <p className="text-center mx-auto"> Suspended </p>;
       case "CANCELED":
-        return "Canceled";
+        return   <p className="text-center mx-auto"> Canceled </p>;
       default:
-        return "Unknown";
+        return  <p className="text-center mx-auto"> Unknown </p>;
     }
   };
 
