@@ -22,11 +22,24 @@ function Matches(props) {
   // Function to format date (Day Month X 202Y)
   function formatDate(utcDate) {
     const date = new Date(utcDate);
-    const day = date.toLocaleString("en-US", { weekday: "short" });
-    const dayOfMonth = date.getDate();
-    const month = date.toLocaleString("en-US", { month: "2-digit" });
-    return `${day} ${dayOfMonth}/${month}`;
+    const now = new Date();
+
+    // Calculate the difference in days between the input date and today
+    const timeDiff = date.getTime() - now.getTime();
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+
+    if (daysDiff === 0) {
+      return "TODAY";
+    } else if (daysDiff === 1) {
+      return "TOMORROW";
+    } else {
+      const day = date.toLocaleString("en-US", { weekday: "short" });
+      const dayOfMonth = date.getDate();
+      const month = date.toLocaleString("en-US", { month: "2-digit" });
+      return `${day} ${dayOfMonth}/${month}`;
+    }
   }
+
 
   // Function to format time (hh:mm PM)
   function formatTime(utcDate) {
@@ -260,7 +273,7 @@ function Matches(props) {
                 showMatchDetails(match.id, index);
               }}
               key={index}
-              className="flex md:flex-row flex-col  items-center bg-white p-4 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
+              className="flex md:flex-row flex-col  items-center bg-white p-4 pe-1 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
             >
               <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
                 <div className="flex justify-start text-center items-center gap-2 w-2/5">
@@ -322,7 +335,7 @@ function Matches(props) {
               {match.status !== "TIMED" ? (
                 matchStatus(match.status)
               ) : (
-                <div className="w-full flex justify-around md:w-1/5 md:flex-col md:items-center md:gap-2">
+                <div className="w-full flex justify-around md:justify-end px-10 md:px-0  md:w-1/5 md:flex-col md:items-center md:gap-2">
                   <p>{formatDate(match.utcDate)} 📅 </p>
                   <p>{formatTime(match.utcDate)} ⏰</p>{" "}
                 </div>
