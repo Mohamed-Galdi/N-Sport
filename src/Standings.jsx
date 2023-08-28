@@ -208,8 +208,8 @@ function Standings(props) {
             <div key={index}>
               <p className="text-center text-2xl font-Ubuntu text-gray-800 mb-2">{group.group}</p>
               <div className="relative overflow-x-auto shadow-md sm:rounded-lg  mb-12">
-                <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                  <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <table className="w-full text-sm text-left text-gray-500 ">
+                  <thead className="text-xs text-gray-700 uppercase bg-gray-50  ">
                     <tr>
                       <th scope="col" className="px-2 py-3 text-center">
                         Pos
@@ -247,7 +247,7 @@ function Standings(props) {
                     {group.table.map((team, index) => (
                       <tr
                         key={index}
-                        className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                        className="bg-white border-b  hover:bg-gray-50 "
                       >
                         <td className="px-2 py-4 text-center">
                           {team.position}
@@ -290,8 +290,8 @@ function Standings(props) {
       ) : (
         // Render Standings data
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
-          <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table className="w-full text-sm text-left text-gray-500 ">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
               <tr>
                 <th scope="col" className="px-2 py-3 text-center">
                   Pos
@@ -332,7 +332,7 @@ function Standings(props) {
               {Standings.map((team, index) => (
                 <tr
                   key={index}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                  className="bg-white border-b  hover:bg-gray-50 "
                 >
                   <td className="px-2 py-4 text-center">{team.position}</td>
                   <td className="px-2 py-4">
