@@ -75,7 +75,11 @@ function Matches(props) {
   const matchStatus = (status) => {
     switch (status) {
       case "SCHEDULED":
-        return <p>Date is not available yet</p>;
+        return (
+          <div className="mx-auto w-1/5">
+            <p className="text-center mx-auto">Date is not available yet </p>
+          </div>
+        );
 
       case "IN_PLAY":
         return (
