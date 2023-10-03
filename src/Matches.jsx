@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"; // Import React hooks
 import axios from "axios"; // Import Axios for making HTTP requests
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"; // Import Skeleton component for loading placeholders
 import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton component styles
-import Countdown from "./utils/countdown";
+import Countdown from "./utils/Countdown";
 
 function Matches(props) {
   // State variables
