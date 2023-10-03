@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"; // Import React hooks
 import axios from "axios"; // Import Axios for making HTTP requests
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton"; // Import Skeleton component for loading placeholders
 import "react-loading-skeleton/dist/skeleton.css"; // Import Skeleton component styles
+import Countdown from "./utils/countdown";
 
 function Matches(props) {
   // State variables
@@ -17,29 +18,15 @@ function Matches(props) {
   const [BL1_Matches, setBL1_Matches] = useState([]);
   const [FL1_Matches, setFL1_Matches] = useState([]);
   const [CL_Matches, setCL_Matches] = useState([]);
-  const [EC_Matches, setEC_Matches] = useState([]);
 
   // Function to format date (Day Month X 202Y)
   function formatDate(utcDate) {
     const date = new Date(utcDate);
-    const now = new Date();
-
-    // Calculate the difference in days between the input date and today
-    const timeDiff = date.getTime() - now.getTime();
-    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-
-    if (daysDiff === 0) {
-      return "TODAY";
-    } else if (daysDiff === 1) {
-      return "TOMORROW";
-    } else {
-      const day = date.toLocaleString("en-US", { weekday: "short" });
-      const dayOfMonth = date.getDate();
-      const month = date.toLocaleString("en-US", { month: "2-digit" });
-      return `${day} ${dayOfMonth}/${month}`;
-    }
+    const day = date.toLocaleString("en-US", { weekday: "short" });
+    const dayOfMonth = date.getDate();
+    const month = date.toLocaleString("en-US", { month: "2-digit" });
+    return `${day} ${dayOfMonth}/${month}`;
   }
-
 
   // Function to format time (hh:mm PM)
   function formatTime(utcDate) {
@@ -65,8 +52,8 @@ function Matches(props) {
       })
 
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("😕 An error occurred while fetching data !!!");
+        // console.error("Error fetching data:", error);
+        // setError("😕 An error occurred while fetching data !!!");
         return []; // Return an empty array in case of an error
       });
   };
@@ -100,13 +87,13 @@ function Matches(props) {
           </div>
         );
       case "POSTPONED":
-        return   <p className="text-center mx-auto"> Postponed </p>;
+        return <p className="text-center mx-auto"> Postponed </p>;
       case "SUSPENDED":
-        return   <p className="text-center mx-auto"> Suspended </p>;
+        return <p className="text-center mx-auto"> Suspended </p>;
       case "CANCELED":
-        return   <p className="text-center mx-auto"> Canceled </p>;
+        return <p className="text-center mx-auto"> Canceled </p>;
       default:
-        return  <p className="text-center mx-auto"> Unknown </p>;
+        return <p className="text-center mx-auto"> Unknown </p>;
     }
   };
 
@@ -125,8 +112,8 @@ function Matches(props) {
       );
       setMatchDetails(response.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      setError("😕 An error occurred while fetching data !!!");
+      // console.error("Error fetching data:", error);
+      // setError("😕 An error occurred while fetching data !!!");
     }
   };
 
@@ -168,11 +155,6 @@ function Matches(props) {
     }
   }, [CL_Matches]);
 
-  useEffect(() => {
-    if (EC_Matches.length !== 0) {
-      setMatches(EC_Matches);
-    }
-  }, [EC_Matches]);
   //////////////////////////////////////////////////////////////////////////////////////////////
 
   // UseEffect to fetch and set matches data for the selected competition (call the fetchMatches() function if the competition is not cached, other ways use the cached data)
@@ -232,14 +214,6 @@ function Matches(props) {
             setCL_Matches(fetchedData);
           }
           break;
-        case "EC":
-          if (EC_Matches.length !== 0) {
-            setMatches(EC_Matches);
-          } else {
-            fetchedData = await fetchMatches(props.competition);
-            setEC_Matches(fetchedData);
-          }
-          break;
         default:
           fetchedData = await fetchMatches(props.competition);
       }
@@ -271,128 +245,161 @@ function Matches(props) {
         // Render matches data
         Matches.map((match, index) => (
           <div key={index}>
-            {/* Match information */}
-            <div
-              onClick={() => {
-                showMatchDetails(match.id, index);
-              }}
-              key={index}
-              className="flex md:flex-row flex-col  items-center bg-white p-4 pe-1 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
-            >
-              <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
-                <div className="flex justify-start text-center items-center gap-2 w-2/5">
-                  <img
-                    src={match.homeTeam.crest}
-                    alt=""
-                    width={35}
-                    height={35}
-                  />
-                  <p className="md:block hidden">
-                    {match.homeTeam.shortName
-                      ? match.homeTeam.shortName
-                      : "not yet defined"}
-                  </p>
-                  <p className="md:hidden block">
-                    {match.homeTeam.tla
-                      ? match.homeTeam.tla
-                      : "not yet defined"}
-                  </p>
-                </div>
-
-                <div className="flex justify-around px-2 items-center gap-2 w-1/5 border-2 h-8 border-ns_primary rounded-md">
-                  <p>
-                    {match.score.fullTime.home !== null
-                      ? match.score.fullTime.home
-                      : match.score.fullTime.home !== 0
-                      ? "-"
-                      : "0"}
-                  </p>
-                  <p> : </p>
-                  <p>
-                    {match.score.fullTime.away !== null
-                      ? match.score.fullTime.away
-                      : match.score.fullTime.away !== 0
-                      ? "-"
-                      : "0"}
-                  </p>
-                </div>
-
-                <div className="flex justify-end text-center items-center gap-2 w-2/5">
-                  <p className="md:block hidden">
-                    {match.awayTeam.shortName
-                      ? match.awayTeam.shortName
-                      : "not yet defined"}
-                  </p>
-                  <p className="md:hidden block">
-                    {match.awayTeam.tla
-                      ? match.awayTeam.tla
-                      : "not yet defined"}
-                  </p>
-                  <img
-                    src={match.awayTeam.crest}
-                    alt=""
-                    width={35}
-                    height={35}
-                  />
-                </div>
-              </div>
-              {match.status !== "TIMED" ? (
-                matchStatus(match.status)
-              ) : (
-                <div className="w-full flex justify-around md:justify-end px-10 md:px-0  md:w-1/5 md:flex-col md:items-center md:gap-2">
-                  <p>{formatDate(match.utcDate)} 📅 </p>
-                  <p>{formatTime(match.utcDate)} ⏰</p>{" "}
-                </div>
-              )}
-            </div>
-            {/* Display match details if selected */}
-            {selectedMatch === index && (
-              <div
-                className={`bg-ns_background text-ns_text p-2 rounded-b-md border border-black border-t-0 w-11/12 mx-auto transition-transform transform ${
-                  selectedMatch === index
-                    ? "translate-y-0"
-                    : "-translate-y-full"
-                }`}
-              >
-                {/* Match details */}
-                <div className=" flex flex-col gap-1">
-                  <div className="flex gap-4">
-                    {/* Display stadium information */}
-                    <p>Stadium:</p>
-                    {matchDetails === "" ? (
-                      <SkeletonTheme baseColor="#f5f5f5" highlightColor="#444">
-                        <Skeleton
-                          className="skeleton"
-                          height={10}
-                          containerClassName="flex-1"
-                        />
-                      </SkeletonTheme>
-                    ) : (
-                      <p>{matchDetails.venue}</p>
-                    )}
-                  </div>
-                  {/* Display referee information */}
-                  <div className="flex gap-4">
-                    <p>Referee:</p>
-                    {matchDetails === "" ? (
-                      <SkeletonTheme baseColor="#f5f5f5" highlightColor="#444">
-                        <Skeleton
-                          className="skeleton"
-                          height={10}
-                          containerClassName="flex-1"
-                        />
-                      </SkeletonTheme>
-                    ) : (
-                      <p>
-                        {matchDetails.referees.length !== 0
-                          ? matchDetails.referees[0].name
-                          : "unknown yet"}
+            {match.homeTeam.id && match.awayTeam.id ? (
+              // Match information
+              <div>
+                <div
+                  onClick={() => {
+                    showMatchDetails(match.id, index);
+                  }}
+                  key={index}
+                  className="flex md:flex-row flex-col  items-center bg-white p-4 pe-1 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
+                >
+                  <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
+                    <div className="flex justify-start text-center items-center gap-2 w-2/5">
+                      <img
+                        src={match.homeTeam.crest}
+                        alt=""
+                        width={35}
+                        height={35}
+                      />
+                      <p className="md:block hidden">
+                        {match.homeTeam.shortName
+                          ? match.homeTeam.shortName
+                          : "not yet defined"}
                       </p>
-                    )}
+                      <p className="md:hidden block">
+                        {match.homeTeam.tla
+                          ? match.homeTeam.tla
+                          : "not yet defined"}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-around px-2 items-center gap-2 w-1/5 border-2 h-8 border-ns_primary rounded-md">
+                      <p>
+                        {match.score.fullTime.home !== null
+                          ? match.score.fullTime.home
+                          : match.score.fullTime.home !== 0
+                          ? "-"
+                          : "0"}
+                      </p>
+                      <p> : </p>
+                      <p>
+                        {match.score.fullTime.away !== null
+                          ? match.score.fullTime.away
+                          : match.score.fullTime.away !== 0
+                          ? "-"
+                          : "0"}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-end text-center items-center gap-2 w-2/5">
+                      <p className="md:block hidden">
+                        {match.awayTeam.shortName
+                          ? match.awayTeam.shortName
+                          : "not yet defined"}
+                      </p>
+                      <p className="md:hidden block">
+                        {match.awayTeam.tla
+                          ? match.awayTeam.tla
+                          : "not yet defined"}
+                      </p>
+                      <img
+                        src={match.awayTeam.crest}
+                        alt=""
+                        width={35}
+                        height={35}
+                      />
+                    </div>
                   </div>
+                  {match.status !== "TIMED" ? (
+                    matchStatus(match.status)
+                  ) : (
+                    <div className="w-full flex justify-around md:justify-end px-10 md:px-0  md:w-1/5 md:flex-col md:items-center md:gap-2">
+                      <p>{formatDate(match.utcDate)} 📅 </p>
+                      <p>{formatTime(match.utcDate)} ⏰</p>{" "}
+                    </div>
+                  )}
+                </div>
+                <div>
+                  {/* // Display match details if selected */}
+                  {selectedMatch === index && (
+                    <div
+                      className={`bg-ns_background text-ns_text p-2 rounded-b-md border border-black border-t-0 w-11/12 mx-auto transition-transform transform ${
+                        selectedMatch === index
+                          ? "translate-y-0"
+                          : "-translate-y-full"
+                      }`}
+                    >
+                      {/* Match details */}
+                      <div className=" flex flex-col gap-1 ">
+                        {match.status == "TIMED" ? (
+                          <div className="flex md:gap-4 gap-1">
+                            <p className=" text-sm md:text-base">Start in: </p>
+                            {matchDetails === "" ? (
+                              <SkeletonTheme
+                                baseColor="#f5f5f5"
+                                highlightColor="#444"
+                              >
+                                <Skeleton
+                                  className="skeleton"
+                                  height={10}
+                                  containerClassName="flex-1"
+                                />
+                              </SkeletonTheme>
+                            ) : (
+                              <Countdown matchDate={match.utcDate} />
+                            )}
+                          </div>
+                        ) : null}
+                        <div className="flex md:gap-4 gap-1">
+                          {/* Display stadium information */}
+                          <p className=" text-sm md:text-base ">Stadium:</p>
+                          {matchDetails === "" ? (
+                            <SkeletonTheme
+                              baseColor="#f5f5f5"
+                              highlightColor="#444"
+                            >
+                              <Skeleton
+                                className="skeleton"
+                                height={10}
+                                containerClassName="flex-1"
+                              />
+                            </SkeletonTheme>
+                          ) : (
+                            <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
+                              {matchDetails.venue}
+                            </p>
+                          )}
+                        </div>
+                        {/* Display referee information */}
+                        <div className="flex md:gap-4 gap-1">
+                          <p className=" text-sm md:text-base">Referee:</p>
+                          {matchDetails === "" ? (
+                            <SkeletonTheme
+                              baseColor="#f5f5f5"
+                              highlightColor="#444"
+                            >
+                              <Skeleton
+                                className="skeleton"
+                                height={10}
+                                containerClassName="flex-1"
+                              />
+                            </SkeletonTheme>
+                          ) : (
+                            <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
+                              {matchDetails.referees.length !== 0
+                                ? matchDetails.referees[0].name
+                                : "unknown yet"}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
+            ) : null}
           </div>
         ))
       )}

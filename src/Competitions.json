@@ -34,11 +34,5 @@
     "active": false,
     "code": "CL",
     "name": "UEFA_Champions_League"
-  },
-  {
-    "img": "/images/Competitions/UEFA_Europa_League.png",
-    "active": false,
-    "code": "EC",
-    "name": "UEFA_Europa_League"
   }
 ]

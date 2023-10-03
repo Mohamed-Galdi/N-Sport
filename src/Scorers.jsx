@@ -15,7 +15,6 @@ function Scorers(props) {
   const [BL1_Scorers, setBL1_Scorers] = useState([]);
   const [FL1_Scorers, setFL1_Scorers] = useState([]);
   const [CL_Scorers, setCL_Scorers] = useState([]);
-  const [EC_Scorers, setEC_Scorers] = useState([]);
 
   // Function to fetch Scorers data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchScorers = (competition) => {
@@ -31,8 +30,8 @@ function Scorers(props) {
       })
 
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("😕 An error occurred while fetching data !!!");
+        // console.error("Error fetching data:", error);
+        // setError("😕 An error occurred while fetching data !!!");
         return []; // Return an empty array in case of an error
       });
   };
@@ -75,11 +74,6 @@ function Scorers(props) {
     }
   }, [CL_Scorers]);
 
-  useEffect(() => {
-    if (EC_Scorers.length !== 0) {
-      setScorers(EC_Scorers);
-    }
-  }, [EC_Scorers]);
   //////////////////////////////////////////////////////////////////////////////////////////////
 
   // UseEffect to fetch and set Scorers data for the selected competition (call the fetchScorers() function if the competition is not cached, other ways use the cached data)
@@ -138,14 +132,6 @@ function Scorers(props) {
             setCL_Scorers(fetchedData);
           }
           break;
-        case "EC":
-          if (EC_Scorers.length !== 0) {
-            setScorers(EC_Scorers);
-          } else {
-            fetchedData = await fetchScorers(props.competition);
-            setEC_Scorers(fetchedData);
-          }
-          break;
         default:
           fetchedData = await fetchScorers(props.competition);
       }
@@ -164,11 +150,8 @@ function Scorers(props) {
         // Display Skeleton placeholders while loading data
         <>
           {/* Skeleton placeholders  */}
-          {/* <Skeleton className="skeleton" height={500} /> */}
+          <Skeleton className="skeleton" height={500} />
          
-          <p className=" mt-4 text-2xl font-Ubuntu text-ns_primary"> {/* this message is better than skeleton loader because before competition start the api sends an empty array */}
-            Scorers data still not available
-          </p>
         </>
       ) : (
         // Render Scorers data

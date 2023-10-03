@@ -194,6 +194,10 @@ function Layout() {
                 <Skeleton className="skeleton" height={200} />
                 <Skeleton className="skeleton" height={200} />
                 <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
+                <Skeleton className="skeleton" height={200} />
               </div>
             ) : (
               <div className="grid md:grid-cols-4 grid-cols-2 mx-8 gap-4">

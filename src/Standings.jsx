@@ -15,7 +15,6 @@ function Standings(props) {
   const [BL1_Standings, setBL1_Standings] = useState([]);
   const [FL1_Standings, setFL1_Standings] = useState([]);
   const [CL_Standings, setCL_Standings] = useState([]);
-  const [EC_Standings, setEC_Standings] = useState([]);
 
   // Function to fetch Standings data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchStandings = (competition) => {
@@ -35,8 +34,8 @@ function Standings(props) {
       })
 
       .catch((error) => {
-        console.error("Error fetching data:", error);
-        setError("😕 An error occurred while fetching data !!!");
+        // console.error("Error fetching data:", error);
+        // setError("😕 An error occurred while fetching data !!!");
         return []; // Return an empty array in case of an error
       });
   };
@@ -112,11 +111,6 @@ function Standings(props) {
     }
   }, [CL_Standings]);
 
-  useEffect(() => {
-    if (EC_Standings.length !== 0) {
-      setStandings(EC_Standings);
-    }
-  }, [EC_Standings]);
   //////////////////////////////////////////////////////////////////////////////////////////////
 
   // UseEffect to fetch and set Standings data for the selected competition (call the fetchStandings() function if the competition is not cached, other ways use the cached data)
@@ -173,14 +167,6 @@ function Standings(props) {
           } else {
             fetchedData = await fetchStandings(props.competition);
             setCL_Standings(fetchedData);
-          }
-          break;
-        case "EC":
-          if (EC_Standings.length !== 0) {
-            setStandings(EC_Standings);
-          } else {
-            fetchedData = await fetchStandings(props.competition);
-            setEC_Standings(fetchedData);
           }
           break;
         default:
