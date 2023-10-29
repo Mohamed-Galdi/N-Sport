@@ -1,4 +1,4 @@
-# n-sport - Football News
+# n-sport - Football Results And News
 
 ![n-sport screenshot](video.gif)
 
