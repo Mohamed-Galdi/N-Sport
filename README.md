@@ -1,4 +1,4 @@
-# n-sport - Football Data Explorer
+# n-sport - Football News
 
 ![n-sport screenshot](video.gif)
 
