@@ -57,14 +57,18 @@ function Layout() {
 
   return (
     // Main Layout
-    <div className="font-Ubuntu font-semibold ">
+    <div className="font-Ubuntu font-semibold bg-gray-800 ">
       {/* Navigation Bar */}
-      <nav className="bg-ns_background  flex justify-between items-center py-4 md:mx-auto mx-4 max-w-7xl">
+      <nav className=" flex justify-between items-center py-4 md:mx-auto mx-4 max-w-7xl">
         {/* N-Sport logo */}
-        <img className="h-10" src="/images/logo/logo.png" alt="N-Sport logo" />
+        <img
+          className="h-10"
+          src="/images/logo/White_Logo.png"
+          alt="N-Sport logo"
+        />
         {/* Current date and time */}
         <div className="flex  gap-4">
-          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md  md:block hidden">
+          <div className="bg-blue-500 p-2 font-bold font-Ubuntu text-white rounded-md  md:block hidden">
             {new Date().toLocaleString("en-US", {
               weekday: "long",
               day: "2-digit",
@@ -72,13 +76,13 @@ function Layout() {
               year: "numeric",
             })}
           </div>
-          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md  md:hidden block">
+          <div className="bg-blue-500 p-2 font-bold font-Ubuntu text-white rounded-md  md:hidden block">
             {new Date().toLocaleString("en-US", {
               day: "2-digit",
               month: "long",
             })}
           </div>
-          <div className="bg-black p-2 font-bold font-Ubuntu text-white rounded-md">
+          <div className="bg-blue-500 p-2 font-bold font-Ubuntu text-white rounded-md">
             {new Date().toLocaleString("en-US", {
               hour: "2-digit",
               minute: "2-digit",
@@ -88,10 +92,10 @@ function Layout() {
       </nav>
 
       {/* Main Content */}
-      <div className="bg-neutral-100 min-h-screen pb-12 pt-4">
+      <div className="bg-[url('/images/logo/pattern.jpg')]  min-h-screen pb-12 pt-4 ">
         <div className="mx-auto max-w-7xl ">
           {/* Competitions Buttons */}
-          <div className="hidden justify-around items-center py-2 md:flex">
+          <div className="hidden justify-around items-center py-2 md:flex bg-white rounded-md">
             {/* Map through Competitions and render buttons (Desktop Design) */}
             {Competitions.map((competition, index) => (
               <button
@@ -177,7 +181,7 @@ function Layout() {
           </div>
           {/* News */}
           <div>
-            <div className="w-full h-[1px] my-12 bg-gray-800"></div>
+            <div className="w-full h-[2px] my-12 bg-blue-500"></div>
             {error ? (
               <div className="text-center text-ns_accent text-3xl mt-8 w-full ">
                 <p>{error}</p>

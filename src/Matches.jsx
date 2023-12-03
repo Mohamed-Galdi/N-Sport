@@ -19,6 +19,11 @@ function Matches(props) {
   const [FL1_Matches, setFL1_Matches] = useState([]);
   const [CL_Matches, setCL_Matches] = useState([]);
 
+  //Round States
+  const [currentRound, setCurrentRound] = useState();
+  const [selectedRound, setSelectedRound] = useState();
+  const [totalRounds, setTotalRounds] = useState();
+
   // Function to format date (Day Month X 202Y)
   function formatDate(utcDate) {
     const date = new Date(utcDate);
@@ -40,7 +45,6 @@ function Matches(props) {
 
   // Function to fetch matches data (called by an upcoming useEffect only in case the competition data is not cached)
   const fetchMatches = (competition) => {
-    // console.log("I'm calling the API (Matches)");
     return axios
       .get(`${import.meta.env.VITE_API_URL}/matches`, {
         params: {
@@ -48,14 +52,28 @@ function Matches(props) {
         },
       })
       .then((res) => {
-        return res.data;
+        setSelectedRound(res.data.currentRound);
+        setCurrentRound(res.data.currentRound);
+        setTotalRounds(res.data.totalRounds);
+        const allMatches = res.data.allMatches;
+        return allMatches;
       })
-
       .catch((error) => {
         // console.error("Error fetching data:", error);
-        // setError("😕 An error occurred while fetching data !!!");
         return []; // Return an empty array in case of an error
       });
+  };
+
+  // Function to handle the navigation of rounds
+  const handleIncrementRound = () => {
+    if (selectedRound < totalRounds) {
+      setSelectedRound(selectedRound + 1);
+    }
+  };
+  const handleDecrementRound = () => {
+    if (selectedRound > 1) {
+      setSelectedRound(selectedRound - 1);
+    }
   };
 
   // Function to determine match status (used in jsx to render a status text based on match.status value)
@@ -223,186 +241,240 @@ function Matches(props) {
   }, [props.competition]);
 
   return (
-    <div className="flex flex-col gap-4 mt-4">
-      {/* Display error message if an error occurred */}
-      {error ? (
-        <div className="text-center text-ns_accent text-3xl mt-8">{error}</div>
-      ) : Matches.length === 0 ? (
-        // Display Skeleton placeholders while loading data
-        <>
-          {/* Skeleton placeholders  */}
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-          <Skeleton className="skeleton" height={80} />
-        </>
+    <div>
+      {!currentRound ? (
+        <Skeleton className="skeleton mt-4" height={30} />
       ) : (
-        // Render matches data
-        Matches.map((match, index) => (
-          <div key={index}>
-            {match.homeTeam.id && match.awayTeam.id ? (
-              // Match information
-              <div>
-                <div
-                  onClick={() => {
-                    showMatchDetails(match.id, index);
-                  }}
-                  key={index}
-                  className="flex md:flex-row flex-col  items-center bg-white p-4 pe-1 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
-                >
-                  <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
-                    <div className="flex justify-start text-center items-center gap-2 w-2/5">
-                      <img
-                        src={match.homeTeam.crest}
-                        alt=""
-                        width={35}
-                        height={35}
-                      />
-                      <p className="md:block hidden">
-                        {match.homeTeam.shortName
-                          ? match.homeTeam.shortName
-                          : "not yet defined"}
-                      </p>
-                      <p className="md:hidden block">
-                        {match.homeTeam.tla
-                          ? match.homeTeam.tla
-                          : "not yet defined"}
-                      </p>
-                    </div>
+        <div className="w-full h-16 mt-4  flex justify-between gap-4">
+          <button
+            onClick={handleDecrementRound}
+            className="rounded-md bg-white w-1/6 flex justify-center items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="40"
+              width="20"
+              viewBox="0 0 320 512"
+              fill="#4e84f9"
+            >
+              <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
+            </svg>
+          </button>
 
-                    <div className="flex justify-around px-2 items-center gap-2 w-1/5 border-2 h-8 border-ns_primary rounded-md">
-                      <p>
-                        {match.score.fullTime.home !== null
-                          ? match.score.fullTime.home
-                          : match.score.fullTime.home !== 0
-                          ? "-"
-                          : "0"}
-                      </p>
-                      <p> : </p>
-                      <p>
-                        {match.score.fullTime.away !== null
-                          ? match.score.fullTime.away
-                          : match.score.fullTime.away !== 0
-                          ? "-"
-                          : "0"}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-end text-center items-center gap-2 w-2/5">
-                      <p className="md:block hidden">
-                        {match.awayTeam.shortName
-                          ? match.awayTeam.shortName
-                          : "not yet defined"}
-                      </p>
-                      <p className="md:hidden block">
-                        {match.awayTeam.tla
-                          ? match.awayTeam.tla
-                          : "not yet defined"}
-                      </p>
-                      <img
-                        src={match.awayTeam.crest}
-                        alt=""
-                        width={35}
-                        height={35}
-                      />
-                    </div>
-                  </div>
-                  {match.status !== "TIMED" ? (
-                    matchStatus(match.status)
-                  ) : (
-                    <div className="w-full flex justify-around md:justify-end px-10 md:px-0  md:w-1/5 md:flex-col md:items-center md:gap-2">
-                      <p>{formatDate(match.utcDate)} 📅 </p>
-                      <p>{formatTime(match.utcDate)} ⏰</p>{" "}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  {/* // Display match details if selected */}
-                  {selectedMatch === index && (
-                    <div
-                      className={`bg-ns_background text-ns_text p-2 rounded-b-md border border-black border-t-0 w-11/12 mx-auto transition-transform transform ${
-                        selectedMatch === index
-                          ? "translate-y-0"
-                          : "-translate-y-full"
-                      }`}
-                    >
-                      {/* Match details */}
-                      <div className=" flex flex-col gap-1 ">
-                        {match.status == "TIMED" ? (
-                          <div className="flex md:gap-4 gap-1">
-                            <p className=" text-sm md:text-base">Start in: </p>
-                            {matchDetails === "" ? (
-                              <SkeletonTheme
-                                baseColor="#f5f5f5"
-                                highlightColor="#444"
-                              >
-                                <Skeleton
-                                  className="skeleton"
-                                  height={10}
-                                  containerClassName="flex-1"
-                                />
-                              </SkeletonTheme>
-                            ) : (
-                              <Countdown matchDate={match.utcDate} />
-                            )}
-                          </div>
-                        ) : null}
-                        <div className="flex md:gap-4 gap-1">
-                          {/* Display stadium information */}
-                          <p className=" text-sm md:text-base ">Stadium:</p>
-                          {matchDetails === "" ? (
-                            <SkeletonTheme
-                              baseColor="#f5f5f5"
-                              highlightColor="#444"
-                            >
-                              <Skeleton
-                                className="skeleton"
-                                height={10}
-                                containerClassName="flex-1"
-                              />
-                            </SkeletonTheme>
-                          ) : (
-                            <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
-                              {matchDetails.venue}
-                            </p>
-                          )}
-                        </div>
-                        {/* Display referee information */}
-                        <div className="flex md:gap-4 gap-1">
-                          <p className=" text-sm md:text-base">Referee:</p>
-                          {matchDetails === "" ? (
-                            <SkeletonTheme
-                              baseColor="#f5f5f5"
-                              highlightColor="#444"
-                            >
-                              <Skeleton
-                                className="skeleton"
-                                height={10}
-                                containerClassName="flex-1"
-                              />
-                            </SkeletonTheme>
-                          ) : (
-                            <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
-                              {matchDetails.referees.length !== 0
-                                ? matchDetails.referees[0].name
-                                : "unknown yet"}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
+          <div
+            className={`rounded-md w-full flex flex-col justify-center items-center font-Ubuntu md:text-xl ${
+              selectedRound === currentRound ? " bg-ns_primary text-white" : "bg-white"
+            }`}
+          >
+            <p>Round: {selectedRound} </p>
+            {selectedRound === currentRound ? (
+              <p className="text-sm">🟢 current round</p>
             ) : null}
           </div>
-        ))
+          <button
+            onClick={handleIncrementRound}
+            className="rounded-md bg-white w-1/6 flex justify-center items-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="40"
+              width="20"
+              viewBox="0 0 320 512"
+              fill="#4e84f9"
+            >
+              <path d="M310.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L242.7 256 73.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
+            </svg>
+          </button>
+        </div>
       )}
+
+      <div className="flex flex-col gap-4 mt-4">
+        {/* Display error message if an error occurred */}
+        {error ? (
+          <div className="text-center text-ns_accent text-3xl mt-8">
+            {error}
+          </div>
+        ) : Matches.length === 0 ? (
+          // Display Skeleton placeholders while loading data
+          <>
+            {/* Skeleton placeholders  */}
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+            <Skeleton className="skeleton" height={80} />
+          </>
+        ) : (
+          // Render matches data
+          Matches.filter((match) => match.matchday === selectedRound).map(
+            (match, index) => (
+              <div key={index}>
+                {match.homeTeam.id && match.awayTeam.id ? (
+                  // Match information
+                  <div>
+                    <div
+                      onClick={() => {
+                        showMatchDetails(match.id, index);
+                      }}
+                      key={index}
+                      className="flex md:flex-row flex-col  items-center bg-white p-4 pe-1 rounded-md border border-ns_primary md:h-[80px] hover:cursor-pointer hover:border-2"
+                    >
+                      <div className="flex justify-between items-center gap-8 order-last md:order-first md:border-r-2 border-t-2 md:border-t-0 border-t-ns_primary pt-4 mt-2 md:pt-0 md:mt-0 md:border-r-ns_primary md:pr-8 md:w-4/5 h-[55px]">
+                        <div className="flex justify-start text-center items-center gap-2 w-2/5">
+                          <img
+                            src={match.homeTeam.crest}
+                            alt=""
+                            width={35}
+                            height={35}
+                          />
+                          <p className="md:block hidden">
+                            {match.homeTeam.shortName
+                              ? match.homeTeam.shortName
+                              : "not yet defined"}
+                          </p>
+                          <p className="md:hidden block">
+                            {match.homeTeam.tla
+                              ? match.homeTeam.tla
+                              : "not yet defined"}
+                          </p>
+                        </div>
+
+                        <div className="flex justify-around px-2 items-center gap-2 w-1/5 border-2 h-8 border-ns_primary rounded-md">
+                          <p>
+                            {match.score.fullTime.home !== null
+                              ? match.score.fullTime.home
+                              : match.score.fullTime.home !== 0
+                              ? "-"
+                              : "0"}
+                          </p>
+                          <p> : </p>
+                          <p>
+                            {match.score.fullTime.away !== null
+                              ? match.score.fullTime.away
+                              : match.score.fullTime.away !== 0
+                              ? "-"
+                              : "0"}
+                          </p>
+                        </div>
+
+                        <div className="flex justify-end text-center items-center gap-2 w-2/5">
+                          <p className="md:block hidden">
+                            {match.awayTeam.shortName
+                              ? match.awayTeam.shortName
+                              : "not yet defined"}
+                          </p>
+                          <p className="md:hidden block">
+                            {match.awayTeam.tla
+                              ? match.awayTeam.tla
+                              : "not yet defined"}
+                          </p>
+                          <img
+                            src={match.awayTeam.crest}
+                            alt=""
+                            width={35}
+                            height={35}
+                          />
+                        </div>
+                      </div>
+                      {match.status !== "TIMED" ? (
+                        matchStatus(match.status)
+                      ) : (
+                        <div className="w-full flex justify-around md:justify-end px-10 md:px-0  md:w-1/5 md:flex-col md:items-center md:gap-2">
+                          <p>{formatDate(match.utcDate)} 📅 </p>
+                          <p>{formatTime(match.utcDate)} ⏰</p>{" "}
+                        </div>
+                      )}
+                    </div>
+                    <div>
+                      {/* // Display match details if selected */}
+                      {selectedMatch === index && (
+                        <div
+                          className={`bg-ns_background text-ns_text p-2 rounded-b-md border border-black border-t-0 w-11/12 mx-auto transition-transform transform ${
+                            selectedMatch === index
+                              ? "translate-y-0"
+                              : "-translate-y-full"
+                          }`}
+                        >
+                          {/* Match details */}
+                          <div className=" flex flex-col gap-1 ">
+                            {match.status == "TIMED" ? (
+                              <div className="flex md:gap-4 gap-1">
+                                <p className=" text-sm md:text-base">
+                                  Start in:{" "}
+                                </p>
+                                {matchDetails === "" ? (
+                                  <SkeletonTheme
+                                    baseColor="#f5f5f5"
+                                    highlightColor="#444"
+                                  >
+                                    <Skeleton
+                                      className="skeleton"
+                                      height={10}
+                                      containerClassName="flex-1"
+                                    />
+                                  </SkeletonTheme>
+                                ) : (
+                                  <Countdown matchDate={match.utcDate} />
+                                )}
+                              </div>
+                            ) : null}
+                            <div className="flex md:gap-4 gap-1">
+                              {/* Display stadium information */}
+                              <p className=" text-sm md:text-base ">Stadium:</p>
+                              {matchDetails === "" ? (
+                                <SkeletonTheme
+                                  baseColor="#f5f5f5"
+                                  highlightColor="#444"
+                                >
+                                  <Skeleton
+                                    className="skeleton"
+                                    height={10}
+                                    containerClassName="flex-1"
+                                  />
+                                </SkeletonTheme>
+                              ) : (
+                                <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
+                                  {matchDetails.venue}
+                                </p>
+                              )}
+                            </div>
+                            {/* Display referee information */}
+                            <div className="flex md:gap-4 gap-1">
+                              <p className=" text-sm md:text-base">Referee:</p>
+                              {matchDetails === "" ? (
+                                <SkeletonTheme
+                                  baseColor="#f5f5f5"
+                                  highlightColor="#444"
+                                >
+                                  <Skeleton
+                                    className="skeleton"
+                                    height={10}
+                                    containerClassName="flex-1"
+                                  />
+                                </SkeletonTheme>
+                              ) : (
+                                <p className="border-ns_primary border-2 rounded-lg md:px-3 px-1 text-sm md:text-base">
+                                  {matchDetails.referees.length !== 0
+                                    ? matchDetails.referees[0].name
+                                    : "unknown yet"}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+            )
+          )
+        )}
+      </div>
     </div>
   );
 }
